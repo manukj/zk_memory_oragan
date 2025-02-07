@@ -22,6 +22,24 @@ function App() {
   const { account, signer, connectWallet } = useWallet();
   const { generateProof } = useZkProof();
 
+  // Add this new useEffect at the top of other useEffects
+  useEffect(() => {
+    const checkWalletConnection = async () => {
+      setIsConnecting(true);
+      try {
+        await connectWallet();
+      } catch (error) {
+        console.error('Error connecting to wallet:', error);
+        setMessage('Failed to connect to wallet automatically');
+        setMessageType('error');
+      } finally {
+        setIsConnecting(false);
+      }
+    };
+
+    checkWalletConnection();
+  }, []); // Empty dependency array means this runs once on mount
+
   // Check verification and load data when userId changes
   useEffect(() => {
     if (!userId) return;
