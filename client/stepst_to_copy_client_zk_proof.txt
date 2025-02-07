@@ -1,0 +1,6 @@
+first 
+mkdir -p client/public/circuits
+
+second : 
+cp server/circuit_js/circuit.wasm client/public/circuits/
+cp server/circuit_0000.zkey client/public/circuits/

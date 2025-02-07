@@ -1,0 +1,234 @@
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+}
+
+.container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+form {
+  display: flex;
+  gap: 1rem;
+}
+
+input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 300px;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0052a3;
+}
+
+.message {
+  margin-top: 1rem;
+  color: #666;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.user-toggle {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.toggle-btn {
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #0066cc;
+  background-color: white;
+  color: #0066cc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+  background-color: #0066cc;
+  color: white;
+}
+
+.toggle-btn:hover {
+  background-color: #0052a3;
+  color: white;
+}
+
+.current-user {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.message.error {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.message.success {
+  color: #28a745;
+}
+
+.storage-status {
+  font-size: 0.8em;
+  margin-left: 0.5rem;
+}
+
+.verification-section {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.verify-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.verify-btn:hover {
+  background-color: #218838;
+}
+
+.verify-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.message.info {
+  color: #0066cc;
+}
+
+.verification-status {
+  margin-left: 0.5rem;
+  font-size: 0.8em;
+}
+
+.verification-status.verified {
+  color: #28a745;
+}
+
+.verification-status.unverified {
+  color: #dc3545;
+}
+
+form.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.data-section {
+  margin-top: 2rem;
+}
+
+.data-list {
+  margin: 1rem 0;
+}
+
+.data-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.timestamp {
+  color: #666;
+  font-size: 0.8em;
+  margin: 0 1rem;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.wallet-info {
+  text-align: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+
+.wallet-info p {
+  margin: 0.5rem 0;
+  font-family: monospace;
+}
+
+.connecting-status {
+  font-size: 0.8em;
+  color: #6c757d;
+  margin-top: 0.5rem;
+}
