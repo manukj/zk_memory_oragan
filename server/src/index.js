@@ -1,6 +1,6 @@
 const express = require('express');
 const setupCommonMiddleware = require('./middleware/common');
-const apiRoutes = require('./routes');
+const storeRoutes = require('./routes/store');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3001;
 setupCommonMiddleware(app);
 
 // Setup routes
-app.use('/api', apiRoutes);
+app.use('/store', storeRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
