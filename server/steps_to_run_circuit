@@ -1,0 +1,16 @@
+from server directory
+
+circom src/circuit/circuit.circom --r1cs --wasm --sym --c
+
+
+
+
+wget https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_12.ptau
+npx snarkjs groth16 setup circuit.r1cs powersOfTau28_hez_final_12.ptau circuit_0000.zkey
+npx snarkjs zkey export verificationkey circuit_0000.zkey verification_key.json
+
+
+
+mkdir -p ../client/public/circuits
+cp circuit_js/circuit.wasm ../client/public/circuits/
+cp circuit_0000.zkey ../client/public/circuits/
