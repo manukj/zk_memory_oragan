@@ -55,18 +55,17 @@ export class OrbitDBService {
       return cachedDoc;
     }
 
-    console.log(`Not found in cache, fetching from OrbitDB: ${id}`);
     const result = this.db.query(doc => doc.uid === uid); // Filter by uid
-    if (result.length) {
-      const cid = await this.db.put(result[0]); // Get the cid of the document
-      await this.postgresService.set(id, result[0], cid, uid);
-      console.log(`Cached document from OrbitDB: ${id}`);
-      return result[0];
-    }
-
-    console.log(`Document not found in OrbitDB: ${id}`);
-    return null;
+    console.log(`Not found in cache, fetching from OrbitDB: ${uid}`);
+    // 3️⃣ Store all documents in PostgreSQL cache
+    for (let doc of result) {
+      const cid = await this.db.put(doc); // Get CID for each document
+      await this.postgresService.set(doc._id, doc, cid, uid);
   }
+
+  console.log(`Cached ${result.length} documents from OrbitDB for UID: ${uid}`);
+  return result;  
+}
 
   async getAllDocs() {
     console.log("Checking cache for all documents...");

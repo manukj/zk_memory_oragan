@@ -66,7 +66,7 @@ export class PostgresService {
 
       await this.pool.query("UPDATE documents SET last_accessed = CURRENT_TIMESTAMP WHERE uid = $1", [uid]);
 
-      return result.rows[0].data;
+      return result.rows.map(row => row.data);
     } else {
       console.log(`Cache miss for document: ${uid}`);
       return null;
