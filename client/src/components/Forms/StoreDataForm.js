@@ -57,7 +57,7 @@ export default function StoreDataForm({ onSuccess }) {
                     {isGenerating ? 'Processing...' : 'Store Data'}
                 </button>
             </form>
-            {message && <Message type={messageType} text={message} />}
+            {message && <p>{message}</p>}
         </div>
     );
 } 

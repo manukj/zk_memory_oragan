@@ -37,7 +37,7 @@ export class OrbitDBService {
       const cid = await this.db.put(doc);
       
       console.log(`Caching document in PostgreSQL: ${doc._id}`);
-      await this.postgresService.set(doc._id, doc, cid);
+      await this.postgresService.set(doc._id, doc, cid, doc.uid);
 
       return cid;
     } catch (error) {
@@ -46,20 +46,20 @@ export class OrbitDBService {
     }
   }
 
-  async getDocById(id) {
-    console.log(`Fetching document: ${id}`);
+  async getDocById(uid) {
+    console.log(`Fetching document: ${uid}`);
 
-    let cachedDoc = await this.postgresService.get(id);
+    let cachedDoc = await this.postgresService.get(uid);
     if (cachedDoc) {
-      console.log(`Returning from cache: ${id}`);
+      console.log(`Returning from cache: ${uid}`);
       return cachedDoc;
     }
 
     console.log(`Not found in cache, fetching from OrbitDB: ${id}`);
-    const result = this.db.get(id);
+    const result = this.db.query(doc => doc.uid === uid); // Filter by uid
     if (result.length) {
       const cid = await this.db.put(result[0]); // Get the cid of the document
-      await this.postgresService.set(id, result[0], cid, result[0].author);
+      await this.postgresService.set(id, result[0], cid, uid);
       console.log(`Cached document from OrbitDB: ${id}`);
       return result[0];
     }
@@ -82,7 +82,7 @@ export class OrbitDBService {
 
     for (let doc of docs) {
       const cid = await this.db.put(doc); // Get the cid for each document
-      await this.postgresService.set(doc._id, doc, cid, doc.author);
+      await this.postgresService.set(doc._id, doc, cid, doc.uid);
     }
 
     console.log("Cached all documents from OrbitDB.");
@@ -95,7 +95,7 @@ export class OrbitDBService {
       const cid = await this.db.put(doc);
 
       console.log(`Updating document in PostgreSQL cache: ${doc._id}`);
-      await this.postgresService.set(doc._id, doc, cid, doc.author);
+      await this.postgresService.set(doc._id, doc, cid, doc.uid);
 
       return doc;
     } catch (error) {

@@ -112,12 +112,12 @@ function App() {
       
       setMessage('Storing data...');
       const response = await api.storeData(proofData, text);
-
+       console.log(response);
       // Update state with response
-      setUserId(response.userId);
+      // setUserId(response.userId);
       setIsVerified(true);
       setText('');
-      setUserData(prev => [...prev, response.data]);
+      // setUserData(prev => [...prev, response.data]);
       setMessage('Data stored successfully');
       setMessageType('success');
 

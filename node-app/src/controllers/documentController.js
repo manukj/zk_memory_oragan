@@ -1,4 +1,5 @@
 import zkService from '../services/zkService.js'; 
+import { v4 as uuidv4 } from 'uuid';
 
 class DocumentController {
   constructor(orbitService) {
@@ -16,8 +17,10 @@ class DocumentController {
       if (!isValid) {
           return res.status(403).json({ status: "Invalid proof" });
       }
-      const _id = publicSignals[0];
-      const  doc  = { _id, data };
+      const uid = publicSignals[0];
+      const _id = uuidv4();
+      console.log(`Creating document with ID: ${_id}`);
+      const  doc  = { _id, data, uid };
   
       // this.orbitService.addVerifiedUser(_id);
       // Attach author and timestamps

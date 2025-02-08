@@ -13,7 +13,7 @@ export class PostgresService {
                 id TEXT PRIMARY KEY,
                 data JSONB NOT NULL,
                 cid TEXT,
-                author TEXT,
+                uid TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 last_accessed TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -57,30 +57,30 @@ export class PostgresService {
 }
 
 
-  async get(id) {
-    console.log(`Checking cache for document: ${id}`);
-    const result = await this.pool.query("SELECT data, cid FROM documents WHERE id = $1", [id]);
+  async get(uid) {
+    console.log(`Checking cache for document: ${uid}`);
+    const result = await this.pool.query("SELECT data, cid, uid FROM documents WHERE uid = $1", [uid]);
 
     if (result.rows.length) {
-      console.log(`Cache hit for document: ${id}`);
+      console.log(`Cache hit for document: ${uid}`);
 
-      await this.pool.query("UPDATE documents SET last_accessed = CURRENT_TIMESTAMP WHERE id = $1", [id]);
+      await this.pool.query("UPDATE documents SET last_accessed = CURRENT_TIMESTAMP WHERE uid = $1", [uid]);
 
       return result.rows[0].data;
     } else {
-      console.log(`Cache miss for document: ${id}`);
+      console.log(`Cache miss for document: ${uid}`);
       return null;
     }
   }
 
-  async set(id, data, cid, author) {
+  async set(id, data, cid, uid){
     console.log(`Storing document in cache: ${id}`);
     await this.pool.query(
-      `INSERT INTO documents (id, data, cid, author, created_at, updated_at, last_accessed) 
+      `INSERT INTO documents (id, data, cid, uid, created_at, updated_at, last_accessed) 
        VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) 
        ON CONFLICT (id) 
-       DO UPDATE SET data = $2, cid = $3, author = $4, last_accessed = CURRENT_TIMESTAMP`,
-      [id, data, cid, author]
+       DO UPDATE SET data = $2, cid = $3, uid = $4, last_accessed = CURRENT_TIMESTAMP`,
+      [id, data, cid, uid]
     );
     // Delete least recently used documents to keep cache size under 5
     const deletedDocs = await this.pool.query(`
@@ -109,7 +109,7 @@ export class PostgresService {
     const client = await this.pool.connect();
     
     try {
-      const result = await client.query("SELECT data, id FROM documents ORDER BY last_accessed DESC");
+      const result = await client.query("SELECT data, id, uid FROM documents ORDER BY last_accessed DESC");
 
       if (result.rows.length) {
         console.log("Returning all documents from cache");
