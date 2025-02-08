@@ -20,40 +20,39 @@ export class PostgresService {
             );
         `);
 
-        // **Check if function exists before creating**
-        const functionExists = await client.query(`
-            SELECT proname FROM pg_proc WHERE proname = 'update_timestamp';
+        // Create update_timestamp function if it doesn't exist
+        await client.query(`
+            CREATE OR REPLACE FUNCTION update_timestamp()
+            RETURNS TRIGGER AS $$
+            BEGIN
+                NEW.updated_at = CURRENT_TIMESTAMP;
+                RETURN NEW;
+            END;
+            $$ language 'plpgsql';
         `);
 
-        if (functionExists.rows.length === 0) {
-            console.log("Creating update_timestamp function...");
-
-            await client.query(`
-                CREATE OR REPLACE FUNCTION update_timestamp()
-                RETURNS TRIGGER AS $$
-                BEGIN
-                    NEW.updated_at = CURRENT_TIMESTAMP;
-                    RETURN NEW;
-                END;
-                $$ LANGUAGE plpgsql;
-            `);
-        } else {
-            console.log("Function update_timestamp already exists, skipping creation.");
-        }
-
-        // **Ensure the trigger doesn't exist before creating**
-        await client.query(`DROP TRIGGER IF EXISTS set_timestamp ON documents;`);
-
+        // Create trigger if it doesn't exist - using IF NOT EXISTS
         await client.query(`
-            CREATE TRIGGER set_timestamp
-            BEFORE UPDATE ON documents
-            FOR EACH ROW
-            EXECUTE FUNCTION update_timestamp();
+            DO $$ 
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1 FROM pg_trigger 
+                    WHERE tgname = 'set_timestamp' 
+                    AND tgrelid = 'documents'::regclass
+                ) THEN
+                    CREATE TRIGGER set_timestamp
+                    BEFORE UPDATE ON documents
+                    FOR EACH ROW
+                    EXECUTE FUNCTION update_timestamp();
+                END IF;
+            END $$;
         `);
 
         console.log("PostgreSQL cache initialized with updated schema.");
-    } finally {
-        client.release();
+    } catch (error) {
+        // Log error details but don't fail initialization
+        console.warn('PostgreSQL initialization warning:', error.message);
+        // Continue execution even if trigger/function already exists
     }
 }
 

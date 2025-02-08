@@ -1,12 +1,17 @@
 import express from "express";
 import dotenv from "dotenv";
-import {OrbitDBService} from "./src/services/orbitDBService.js";
+import { OrbitDBService } from "./src/services/orbitDBService.js";
 import DocumentController from "./src/controllers/documentController.js";
 import createDocumentRouter from "./src/routes/documentRoutes.js";
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
+
+// Enable CORS for all origins (development only)
+app.use(cors());
+
 app.use(express.json());
 
 const orbitService = new OrbitDBService();
@@ -17,6 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/doc", createDocumentRouter(documentController));
+
 
 async function start() {
   await orbitService.init();

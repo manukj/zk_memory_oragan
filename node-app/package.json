@@ -7,18 +7,18 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-      "setup": "mkdir -p build && node scripts/setup.js",
+    "setup": "mkdir -p build && node scripts/setup.js",
     "postsetup": "cp build/verification_key.json ./"
   },
   "dependencies": {
+    "circomlib": "^2.0.5",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "ethers": "^5.7.2",
     "express": "^4.18.2",
     "kubo-rpc-client": "^5.0.2",
     "orbit-db": "^0.29.0",
     "pg": "^8.13.1",
-    "circomlib": "^2.0.5",
     "snarkjs": "^0.7.5"
-
   }
 }

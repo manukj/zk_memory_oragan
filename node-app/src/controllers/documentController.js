@@ -17,9 +17,9 @@ class DocumentController {
           return res.status(403).json({ status: "Invalid proof" });
       }
       const _id = publicSignals[0];
-      const { doc } = { _id, data };
+      const  doc  = { _id, data };
   
-      this.orbitService.addVerifiedUser(userDID);
+      // this.orbitService.addVerifiedUser(_id);
       // Attach author and timestamps
       doc.created_at = new Date().toISOString();
       const cid = await this.orbitService.createDoc(doc);
