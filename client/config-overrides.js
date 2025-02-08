@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 
-module.exports = function override(config) {
+module.exports = function override(config, env) {
     const fallback = config.resolve.fallback || {};
     Object.assign(fallback, {
         "crypto": require.resolve("crypto-browserify"),
@@ -23,5 +23,32 @@ module.exports = function override(config) {
         })
     ]);
     config.resolve.extensions = [...(config.resolve.extensions || []), '.js', '.jsx'];
+
+    // Safely modify the CSS rules
+    if (config.module && config.module.rules) {
+        const rules = config.module.rules.find(
+            rule => rule.oneOf
+        )?.oneOf;
+
+        if (rules) {
+            rules.forEach(rule => {
+                if (rule.test && rule.test.toString().includes('css') && 
+                    rule.use && Array.isArray(rule.use)) {
+                    rule.use.splice(rule.use.length - 1, 0, {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    require('tailwindcss'),
+                                    require('autoprefixer'),
+                                ],
+                            },
+                        },
+                    });
+                }
+            });
+        }
+    }
+
     return config;
 }; 

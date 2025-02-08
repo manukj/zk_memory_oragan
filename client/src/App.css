@@ -232,3 +232,305 @@ form.disabled {
   color: #6c757d;
   margin-top: 0.5rem;
 }
+
+.layout {
+  min-height: 100vh;
+}
+
+.header {
+  padding: 0 24px;
+  background: #1890ff;
+}
+
+.card-hover {
+  transition: all 0.3s;
+}
+
+.card-hover:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.custom-input {
+  border-radius: 6px;
+}
+
+.custom-input:hover {
+  border-color: #1890ff;
+}
+
+.custom-collapse {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.data-card {
+  margin-bottom: 16px;
+  border-radius: 6px;
+}
+
+.data-card:last-child {
+  margin-bottom: 0;
+}
+
+.timestamp {
+  margin-top: 8px;
+  text-align: right;
+}
+
+.ant-collapse-header {
+  background: #fafafa;
+}
+
+.ant-card-actions {
+  background: #fafafa;
+}
+
+/* Loading states */
+.loading-container {
+  text-align: center;
+  padding: 24px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 12px;
+  }
+  
+  .ant-typography {
+    font-size: 18px;
+  }
+}
+
+/* Modern theme */
+.modern-layout {
+  min-height: 100vh;
+  background: #f0f2f5;
+}
+
+.modern-header {
+  padding: 0 24px;
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+}
+
+.app-logo {
+  height: 32px;
+}
+
+.modern-content {
+  padding: 88px 24px 24px;
+  min-height: calc(100vh - 64px);
+}
+
+/* Cards */
+.input-card, .entry-card {
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.input-card:hover, .entry-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Input styles */
+.modern-input {
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  padding: 12px;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.modern-input:hover {
+  border-color: #40a9ff;
+}
+
+.modern-input:focus {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+/* Buttons */
+.submit-button {
+  height: 48px;
+  font-size: 16px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  border: none;
+  transition: all 0.3s;
+}
+
+.submit-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+}
+
+.connect-button {
+  height: 40px;
+  border-radius: 20px;
+  padding: 0 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.connect-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Wallet display */
+.wallet-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 20px;
+  padding: 4px 16px;
+}
+
+.wallet-address {
+  color: white !important;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Collapse panels */
+.modern-collapse {
+  background: transparent;
+  border: none;
+}
+
+.modern-collapse .ant-collapse-item {
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border: none;
+  background: white;
+  overflow: hidden;
+}
+
+.modern-collapse .ant-collapse-header {
+  padding: 16px 24px !important;
+  background: white;
+}
+
+.panel-icon {
+  color: #1890ff;
+  font-size: 18px;
+}
+
+/* Badges */
+.modern-badge .ant-badge-count {
+  background: #1890ff;
+  box-shadow: none;
+  padding: 0 8px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 10px;
+}
+
+/* Entry styling */
+.entry-text {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.entry-timestamp {
+  margin-top: 12px;
+  text-align: right;
+  font-size: 12px;
+}
+
+/* Alert messages */
+.floating-alert {
+  position: fixed;
+  top: 88px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: auto;
+  min-width: 300px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .modern-header {
+    padding: 0 16px;
+  }
+  
+  .modern-content {
+    padding: 88px 16px 16px;
+  }
+  
+  .ant-typography {
+    font-size: 16px;
+  }
+}
+
+/* Add these styles to your App.css */
+.bg-white {
+  background-color: white;
+}
+
+textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Optional: Add smooth transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Optional: Add hover effects */
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Optional: Add focus styles */
+button:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+/* Collapse styling */
+.ant-collapse {
+  background: transparent !important;
+}
+
+.ant-collapse > .ant-collapse-item {
+  margin-bottom: 16px;
+  border: none !important;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  padding: 16px 24px !important;
+  background: white;
+  border-radius: 16px !important;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-content {
+  border-top: none;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box {
+  padding: 24px;
+}
+
+.ant-collapse-arrow {
+  color: #6B7280;
+}
