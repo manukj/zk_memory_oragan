@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  ipfs-node:
+    container_name: ipfs-node
+    build: ./ipfs
+    networks:
+      - dmo-network
+    ports:
+      - "4001:4001"
+      - "5001:5001"
+      - "8080:8080"
+
+  node-app:
+    container_name: node-app
+    build: ./node-app
+    depends_on:
+      - ipfs-node
+    networks:
+      - dmo-network
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./node-app/.env 
+
+networks:
+  dmo-network:
+    driver: bridge

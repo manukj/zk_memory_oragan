@@ -1,9 +1,9 @@
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:3000/doc';
 
 export const api = {
     storeData: async (proofData, textData) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/store`, {
+            const response = await fetch(`${API_BASE_URL}`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export const api = {
 
     getUserData: async (userId) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/data/${userId}`);
+            const response = await fetch(`${API_BASE_URL}/${userId}`);
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to fetch user data');
@@ -43,7 +43,7 @@ export const api = {
 
     getAllData: async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/data`);
+            const response = await fetch(`${API_BASE_URL}`);
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.error || 'Failed to fetch all data');

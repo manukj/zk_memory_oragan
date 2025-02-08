@@ -65,7 +65,7 @@ export function StoreForm() {
       const proofData = await ProofService.generateProof(signer, account)
       
       // Store data with proof verification
-      const response = await fetch('http://localhost:3001/store', {
+      const response = await fetch('http://localhost:3000/doc', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
