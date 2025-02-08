@@ -11,8 +11,12 @@ export class OrbitDBService {
   async init() {
     try {
       console.log("Connecting to IPFS...");
-      this.ipfs = create({ url: "http://ipfs-node:5001" });
-
+      this.ipfs = create({ url: "http://18.130.48.44:5001", Address: {
+        API : '/ip4/18.130.48.44/tcp/5001',
+        Gateway : '/ip4/18.130.48.44/tcp/8080'
+      }
+       });
+       
       console.log("Initializing OrbitDB...");
       this.orbitdb = await OrbitDB.createInstance(this.ipfs, {
         directory: "./orbitdb_data",
