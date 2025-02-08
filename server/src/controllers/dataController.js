@@ -14,15 +14,17 @@ exports.storeData = async (req, res, next) => {
             return res.status(403).json({ status: "Invalid proof" });
         }
 
-        const nullifier = publicSignals[0];
+        const userDID = publicSignals[0];
         const publicHash = publicSignals[1];
 
-        storageService.addVerifiedUser(nullifier);
-        const newData = storageService.storeData(nullifier, data);
+
+        storageService.addVerifiedUser(userDID);
+        //TODO integrate Localstorafe with IPFS
+        const newData = storageService.storeData(userDID, data);
 
         res.json({
             status: "Data stored successfully",
-            userId: nullifier,
+            userId: userDID,
             publicHash: publicHash,
             data: newData
         });
