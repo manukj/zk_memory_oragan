@@ -11,12 +11,13 @@ export class OrbitDBService {
   async init() {
     try {
       console.log("Connecting to IPFS...");
-      this.ipfs = create({ url: "http://18.130.48.44:5001", Address: {
-        API : '/ip4/18.130.48.44/tcp/5001',
-        Gateway : '/ip4/18.130.48.44/tcp/8080'
-      }
-       });
-       
+      this.ipfs = create({
+        url: "http://18.130.48.44:5001", Address: {
+          API: '/ip4/18.130.48.44/tcp/5001',
+          Gateway: '/ip4/18.130.48.44/tcp/8080'
+        }
+      });
+
       console.log("Initializing OrbitDB...");
       this.orbitdb = await OrbitDB.createInstance(this.ipfs, {
         directory: "./orbitdb_data",
@@ -39,7 +40,7 @@ export class OrbitDBService {
     try {
       console.log(`Storing document in OrbitDB: ${doc._id}`);
       const cid = await this.db.put(doc);
-      
+
       console.log(`Caching document in PostgreSQL: ${doc._id}`);
       await this.postgresService.set(doc._id, doc, cid, doc.uid);
 
@@ -65,11 +66,11 @@ export class OrbitDBService {
     for (let doc of result) {
       const cid = await this.db.put(doc); // Get CID for each document
       await this.postgresService.set(doc._id, doc, cid, uid);
-  }
+    }
 
-  console.log(`Cached ${result.length} documents from OrbitDB for UID: ${uid}`);
-  return result;  
-}
+    console.log(`Cached ${result.length} documents from OrbitDB for UID: ${uid}`);
+    return result;
+  }
 
   async getAllDocs() {
     console.log("Checking cache for all documents...");
