@@ -1,6 +1,6 @@
-# ZK-Decentralized Memory Organ
+# ZK Memory Organ
 
-The **ZK-Decentralized Memory Organ** is a cutting-edge, privacy-focused, efficient, error-free, and highly secure data storage solution. By leveraging **Zero-Knowledge Proofs (ZK-SNARKs)** for authentication, **OrbitDB & IPFS** for decentralized storage, and **PostgreSQL** for caching and load balancing, this system ensures **high security, efficiency, and fault tolerance**.
+The **ZK Memory Organ** is a cutting-edge, privacy-focused, efficient, error-free, and highly secure data storage solution. By leveraging **Zero-Knowledge Proofs (ZK-SNARKs)** for authentication, **OrbitDB & IPFS** for decentralized storage, and **PostgreSQL** for caching and load balancing, this system ensures **high security, efficiency, and fault tolerance**.
 
 ## Key Features
 
