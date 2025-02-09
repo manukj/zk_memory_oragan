@@ -194,16 +194,16 @@ function App() {
 
       // Create FormData object to handle both text and file
       const formData = new FormData();
-      
-      
+
+
       // Only append file if it exists
       if (file) {
         formData.append('file', file);
       }
 
       showMessage('Storing data...', 'info');
-      const response = await api.storeData(proofData,text, formData);
-      
+      const response = await api.storeData(proofData, text, formData);
+
       setIsVerified(true);
       setText('');
       setFile(null);
@@ -293,13 +293,13 @@ function App() {
       {/* Main Content */}
       <main className="pt-32 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {messageVisible && message && (
-          <div 
+          <div
             className={`fixed top-28 left-1/2 transform -translate-x-1/2 z-40 
                        px-6 py-3 rounded-lg shadow-lg text-white
                        transition-opacity duration-300
-                       ${messageType === 'error' ? 'bg-red-500' : 
-                         messageType === 'success' ? 'bg-green-500' : 
-                         'bg-blue-500'}`}
+                       ${messageType === 'error' ? 'bg-red-500' :
+                messageType === 'success' ? 'bg-green-500' :
+                  'bg-blue-500'}`}
           >
             {message}
           </div>
@@ -350,7 +350,7 @@ function App() {
                       className={`flex items-center gap-2 px-6 py-3 rounded-xl 
                                 border-2 border-dashed cursor-pointer transition-all
                                 ${!account ? 'bg-gray-50 border-gray-200 cursor-not-allowed' :
-                                  'border-blue-200 hover:border-blue-500 bg-blue-50'}`}
+                          'border-blue-200 hover:border-blue-500 bg-blue-50'}`}
                     >
                       <UploadOutlined className="h-5 w-5 text-blue-500" />
                       <span className="text-gray-700">Choose File</span>
@@ -399,7 +399,7 @@ function App() {
 
           {/* Data Display Section */}
           <div className="space-y-6">
-            <Collapse 
+            <Collapse
               activeKey={activeKeys}
               onChange={(keys) => {
                 setActiveKeys(keys);
@@ -407,7 +407,7 @@ function App() {
               className="bg-transparent border-none"
             >
               {/* Personal Entries */}
-              <Panel 
+              <Panel
                 header={
                   <div className="flex items-center justify-between w-full pr-8">
                     <div className="flex items-center space-x-3">
@@ -426,9 +426,39 @@ function App() {
                   {account ? (
                     isVerified ? (
                       personalData.length > 0 ? (
-                        personalData.map((item, index) => (
-                          <div key={item._id} className="bg-gray-50 rounded-xl p-4 group hover:bg-gray-100 transition-colors">
-                            <p className="text-gray-800">{item.data.text}</p>
+                        personalData.map((item) => (
+                          <div
+                            key={item._id}
+                            className="bg-gray-50 rounded-xl p-4 group hover:bg-gray-100 transition-colors"
+                          >
+                            {/* Display text if present */}
+                            {item.text ? (
+                              <p className="text-gray-800 mb-2">{item.text}</p>
+                            ) : item.data ? (
+                              <p className="text-gray-800 mb-2">
+                                {item.data.toString().split(" ").slice(0, 5).join(" ")}
+                              </p>
+                            ) : null}
+
+                            {/* Display file info if available */}
+                            {item.file && item.file.data && (
+                              <div className="mb-2">
+
+                                <a
+                                  href={item.file.data}
+                                  download={item.file.name || "download"}
+                                  className="mt-2 inline-block text-blue-500 hover:underline"
+                                >
+                                  Download {item.file.name || "File"}
+                                </a>
+                              </div>
+                            )}
+
+                            {/* Fallback if neither text nor file exists */}
+                            {!item.text && !item.data && !item.file && (
+                              <p className="text-gray-800">No content available</p>
+                            )}
+
                             <div className="flex justify-between items-center mt-4">
                               <span className="text-sm text-gray-500">
                                 {formatDate(item.created_at)}
@@ -436,8 +466,7 @@ function App() {
                               <button
                                 onClick={() => handleDelete(item._id)}
                                 disabled={!isVerified}
-                                className="opacity-0 group-hover:opacity-100 p-2 rounded-full hover:bg-red-100 
-                                         text-red-500 transition-all disabled:opacity-50"
+                                className="opacity-0 group-hover:opacity-100 p-2 rounded-full hover:bg-red-100 text-red-500 transition-all disabled:opacity-50"
                               >
                                 <TrashIcon className="h-5 w-5" />
                               </button>
@@ -457,25 +486,18 @@ function App() {
                         <button
                           onClick={async () => {
                             try {
-                              showMessage('Generating proof...', 'info');
-                              
+                              showMessage("Generating proof...", "info");
                               const proofData = await generateProof(account, signer);
                               const publicSignals = proofData.publicSignals;
-                              
                               await fetchPersonalData(publicSignals[0]);
-                              
                               setIsVerified(true);
-                              showMessage('Verification successful!', 'success');
+                              showMessage("Verification successful!", "success");
                             } catch (error) {
-                              console.error('Verification error:', error);
-                              showMessage('Verification failed: ' + error.message, 'error');
+                              console.error("Verification error:", error);
+                              showMessage("Verification failed: " + error.message, "error");
                             }
                           }}
-                          className="flex items-center justify-center gap-2 px-8 py-3 
-                                   bg-blue-500 hover:bg-blue-600 text-white 
-                                   rounded-xl transition-all duration-200
-                                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                                   shadow-sm hover:shadow-md"
+                          className="flex items-center justify-center gap-2 px-8 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-sm hover:shadow-md"
                         >
                           <HiLockClosed className="h-5 w-5" />
                           <span className="font-medium">Prove Yourself</span>
@@ -488,51 +510,11 @@ function App() {
                     </div>
                   )}
                 </div>
+
               </Panel>
 
-              {/* Network Data */}
-              <Panel
-                header={
-                  <div className="flex items-center justify-between w-full pr-8">
-                    <div className="flex items-center space-x-3">
-                      <GlobeAltIcon className="h-6 w-6 text-primary-500" />
-                      <h2 className="text-xl font-semibold text-gray-900">Network Data</h2>
-                    </div>
-                    <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm">
-                      {userData.length}
-                    </span>
-                  </div>
-                }
-                key="2"
-                className="bg-white rounded-2xl shadow-sm overflow-hidden"
-              >
-                <div className="space-y-4">
-                  {userData.length > 0 ? (
-                    userData.map((item, index) => (
-                      <div key={item._id} className="bg-gray-50 rounded-xl p-4 hover:bg-gray-100 transition-colors">
-                        {/* <p className="text-gray-800">{item.data.text}</p> */}
-                        <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono bg-gray-100 px-2 py-1 rounded">
-                              ID: {item._id.slice(0, 8)}...
-                            </span>
-                            <span className="font-mono bg-gray-100 px-2 py-1 rounded">
-                              UID: {item.uid.slice(0, 8)}...
-                            </span>
-                          </div>
-                          <span>
-                            {formatDate(item.created_at)}
-                          </span>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-center py-8 text-gray-500">
-                      No entries yet
-                    </div>
-                  )}
-                </div>
-              </Panel>
+
+
             </Collapse>
           </div>
         </div>

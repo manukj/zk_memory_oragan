@@ -63,6 +63,7 @@ export class OrbitDBService {
       console.log(`Storing document in OrbitDB: ${doc._id}`);
       const cid = await this.db.put(doc);
       console.log(`Caching document in PostgreSQL: ${doc._id}`);
+      console.log(`cid ${cid}`);
       await this.postgresService.set(doc._id, doc, cid, doc.uid);
       return cid;
     } catch (error) {
