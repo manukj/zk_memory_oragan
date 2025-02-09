@@ -5,6 +5,7 @@ import { PostgresService } from './postgresService.js';
 export class OrbitDBService {
   constructor() {
     this.db = null;
+    this.userdb = null;
     this.postgresService = new PostgresService();
   }
 
@@ -26,24 +27,43 @@ export class OrbitDBService {
       this.db = await this.orbitdb.docstore("dmo-docstore", {
         accessController: { write: ["*"] },
       });
+
       await this.db.load();
+
+
+      this.userdb = await this.orbitdb.docstore("dmo-userstore", {
+        accessController: { write: ["*"] },
+      });
+
+      await this.userdb.load();
 
       await this.postgresService.init();
       console.log("OrbitDB initialized. DB address:", this.db.address.toString());
+      console.log("OrbitDB initialized. User address:", this.userdb.address.toString());
     } catch (error) {
       console.error("Failed to initialize OrbitDB:", error);
       process.exit(1);
     }
   }
 
+  async createUser(user) {
+    try {
+      console.log(`Storing user in OrbitDB: ${user._id}`);
+      const cid = await this.userdb.put(user);
+      return cid;
+    } catch (error) {
+      console.error("Error creating user:", error);
+      throw new Error("Failed to create user");
+    }
+  }
+
+
   async createDoc(doc) {
     try {
       console.log(`Storing document in OrbitDB: ${doc._id}`);
       const cid = await this.db.put(doc);
-
       console.log(`Caching document in PostgreSQL: ${doc._id}`);
       await this.postgresService.set(doc._id, doc, cid, doc.uid);
-
       return cid;
     } catch (error) {
       console.error("Error creating document:", error);
@@ -108,6 +128,26 @@ export class OrbitDBService {
     }
   }
 
+  async deleteUser(id) {
+    try {
+      console.log(`Deleting user from OrbitDB: ${id}`);
+      await this.userdb.del(id);
+      console.log(`Removing user from PostgreSQL cache: ${id}`);
+      await this.postgresService.del(id);
+      
+      // Delete all documents associated with the user
+      const docs = await this.db.query(doc => doc.uid === id);
+      for (let doc of docs) {
+        await this.db.del(doc._id);
+        console.log(`Deleted document: ${doc._id}`);
+      }
+      console.log(`User ${id} and associated documents deleted successfully`);
+    } catch (error) {
+      console.error(`Error deleting user ${id}:`, error);
+      throw new Error("Failed to delete user");
+    }
+  }
+
   async deleteDoc(id) {
     try {
       console.log(`Deleting document from OrbitDB: ${id}`);
@@ -118,6 +158,17 @@ export class OrbitDBService {
     } catch (error) {
       console.error(`Error deleting document ${id}:`, error);
       throw new Error("Failed to delete document");
+    }
+  }
+
+  async getUserById(_id) {
+    try {
+      const user = await this.userdb.get(_id);
+      console.log(user);
+      return user;
+    } catch (error) {
+      console.error("Error getting user:", error);
+      throw new Error("Failed to get user");
     }
   }
 } 

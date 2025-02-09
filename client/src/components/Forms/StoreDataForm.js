@@ -6,6 +6,7 @@ import Message from '../Common/Message';
 
 export default function StoreDataForm({ onSuccess }) {
     const [text, setText] = useState('');
+    const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
     const [messageType, setMessageType] = useState('');
     const { account, signer } = useWallet();
@@ -21,15 +22,28 @@ export default function StoreDataForm({ onSuccess }) {
                 return;
             }
 
+            if (!text && !file) {
+                setMessage('Please enter text or upload a file');
+                setMessageType('info');
+                return;
+            }
+
             setMessage('Generating proof...');
             setMessageType('info');
 
             const proofData = await generateProof(account, signer);
             
             setMessage('Storing data...');
-            const response = await api.storeData(proofData, text);
-
+            let response;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('proofData', JSON.stringify(proofData));
+            
+            response = await api.storeData(proofData, text, formData);
+            
             setText('');
+            setFile(null);
             onSuccess(response);
             setMessage('Data stored successfully');
             setMessageType('success');
@@ -40,24 +54,39 @@ export default function StoreDataForm({ onSuccess }) {
         }
     };
 
+    const handleFileChange = (e) => {
+        if (e.target.files[0]) {
+            setFile(e.target.files[0]);
+            setText(''); // Clear text input when file is selected
+        }
+    };
+
     return (
         <div className="store-data-form">
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
                     value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    onChange={(e) => {
+                        setText(e.target.value);
+                        setFile(null); // Clear file when text is entered
+                    }}
                     placeholder="Enter your text"
-                    disabled={!account}
+                    disabled={!account || file}
+                />
+                <input
+                    type="file"
+                    onChange={handleFileChange}
+                    disabled={!account || text.length > 0}
                 />
                 <button 
                     type="submit" 
-                    disabled={!account || isGenerating}
+                    disabled={!account || isGenerating || (!text && !file)}
                 >
                     {isGenerating ? 'Processing...' : 'Store Data'}
                 </button>
             </form>
-            {message && <p>{message}</p>}
+            {message && <Message type={messageType}>{message}</Message>}
         </div>
     );
 } 

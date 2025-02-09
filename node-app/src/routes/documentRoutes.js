@@ -8,6 +8,8 @@ function createDocumentRouter(documentController) {
   router.get("/", documentController.getAllDocuments.bind(documentController));
   router.put("/:id", documentController.updateDocument.bind(documentController));
   router.delete("/:id", documentController.deleteDocument.bind(documentController));
+  router.get("/user/:id", documentController.getUser.bind(documentController));
+  router.delete("/user/:id", documentController.deleteUser.bind(documentController));
 
   return router;
 }

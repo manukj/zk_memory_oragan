@@ -1,8 +1,23 @@
 const API_BASE_URL = 'http://localhost:3000/doc';
 
 export const api = {
-    storeData: async (proofData, textData) => {
+    storeData: async (proofData, textData, formData) => {
         try {
+            let fileData = null;
+            if (formData && formData.get('file')) {
+                const file = formData.get('file');
+                fileData = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve({
+                        base64: reader.result,
+                        name: file.name,
+                        type: file.type
+                    });
+                    reader.onerror = error => reject(error);
+                });
+            }
+
             const response = await fetch(`${API_BASE_URL}`, {
                 method: 'POST',
                 headers: { 
@@ -11,7 +26,8 @@ export const api = {
                 },
                 body: JSON.stringify({
                     ...proofData,
-                    data: { text: textData }
+                    text: textData,
+                    file: fileData
                 })
             });
             

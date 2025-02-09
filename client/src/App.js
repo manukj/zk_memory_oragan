@@ -8,7 +8,7 @@ import { api } from './services/api';
 import './App.css';
 import { Form, Input, Button, Card, Row, Col, Collapse, Typography, Badge, Layout, Space, Alert, Empty } from 'antd';
 import axios from 'axios';
-import { UserOutlined, GlobalOutlined, LinkOutlined, CheckCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import { UserOutlined, GlobalOutlined, LinkOutlined, CheckCircleOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons';
 import { UserIcon, GlobeAltIcon, LinkIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { FaShieldAlt, FaDatabase, FaLock } from 'react-icons/fa';
 import { RiSecurePaymentLine } from 'react-icons/ri';
@@ -46,6 +46,8 @@ function App() {
   const [personalData, setPersonalData] = useState([]);
   const [publicSignal, setPublicSignal] = useState(null);
   const [activeKeys, setActiveKeys] = useState(['1']);
+  const [file, setFile] = useState(null);
+  const [fileList, setFileList] = useState([]);
 
   // Get wallet and ZK proof functions from hooks
   const { account, signer, connectWallet } = useWallet();
@@ -177,11 +179,10 @@ function App() {
     }, 3000);
   };
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // First ensure wallet is connected
       if (!account) {
         setMessage('Please connect your wallet first');
         setMessageType('info');
@@ -189,22 +190,43 @@ function App() {
       }
 
       showMessage('Generating proof...', 'info');
-
       const proofData = await generateProof(account, signer);
 
+      // Create FormData object to handle both text and file
+      const formData = new FormData();
+      
+      
+      // Only append file if it exists
+      if (file) {
+        formData.append('file', file);
+      }
+
       showMessage('Storing data...', 'info');
-      const response = await api.storeData(proofData, text);
-      console.log(response);
-      // Update state with response
-      // setUserId(response.userId);
+      const response = await api.storeData(proofData,text, formData);
+      
       setIsVerified(true);
       setText('');
-      // setUserData(prev => [...prev, response.data]);
+      setFile(null);
+      setFileList([]);
       showMessage('Data stored successfully', 'success');
 
     } catch (error) {
       showMessage('Error: ' + error.message, 'error');
       console.error('Error:', error);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFileList([{
+        uid: '-1',
+        name: selectedFile.name,
+        status: 'done',
+        size: selectedFile.size,
+        type: selectedFile.type
+      }]);
     }
   };
 
@@ -309,6 +331,46 @@ function App() {
                              disabled:bg-gray-50 disabled:cursor-not-allowed
                              placeholder-gray-400"
                   />
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  <label className="text-lg font-medium text-gray-700">
+                    Upload File
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="file"
+                      onChange={handleFileChange}
+                      className="hidden"
+                      id="file-upload"
+                      disabled={!account}
+                    />
+                    <label
+                      htmlFor="file-upload"
+                      className={`flex items-center gap-2 px-6 py-3 rounded-xl 
+                                border-2 border-dashed cursor-pointer transition-all
+                                ${!account ? 'bg-gray-50 border-gray-200 cursor-not-allowed' :
+                                  'border-blue-200 hover:border-blue-500 bg-blue-50'}`}
+                    >
+                      <UploadOutlined className="h-5 w-5 text-blue-500" />
+                      <span className="text-gray-700">Choose File</span>
+                    </label>
+                    {fileList.length > 0 && (
+                      <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
+                        <span className="text-sm text-gray-600">{fileList[0].name}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFile(null);
+                            setFileList([]);
+                          }}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <DeleteOutlined className="h-4 w-4" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-2 text-gray-500 px-2">
@@ -448,7 +510,7 @@ function App() {
                   {userData.length > 0 ? (
                     userData.map((item, index) => (
                       <div key={item._id} className="bg-gray-50 rounded-xl p-4 hover:bg-gray-100 transition-colors">
-                        <p className="text-gray-800">{item.data.text}</p>
+                        {/* <p className="text-gray-800">{item.data.text}</p> */}
                         <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
                           <div className="flex items-center gap-2">
                             <span className="font-mono bg-gray-100 px-2 py-1 rounded">
