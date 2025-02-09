@@ -1,4 +1,5 @@
 # ZK Memory Organ
+![logo](https://github.com/user-attachments/assets/8b43c2cb-6e16-4446-b3d5-372a11fa196a)
 
 The **ZK Memory Organ** is a cutting-edge, privacy-focused, efficient, error-free, and highly secure data storage solution. By leveraging **Zero-Knowledge Proofs (ZK-SNARKs)** for authentication, **OrbitDB & IPFS** for decentralized storage, and **PostgreSQL** for caching and load balancing, this system ensures **high security, efficiency, and fault tolerance**.
 
@@ -100,6 +101,49 @@ The **ZK Memory Organ** is a cutting-edge, privacy-focused, efficient, error-fre
 7. When a **new node is added**, the script registers it within the cluster, enabling seamless data sharing using a **secret and bootstrap ID**.
 
 ---
+
+
+### How to Run the Project
+
+## Prerequisites
+
+Ensure you have the following installed on your system before running the project:
+
+- [Docker](https://docs.docker.com/get-docker/) - Required to run the backend using containers.
+- [Node.js](https://nodejs.org/) (LTS version recommended) - Needed to run the client.
+- [npm](https://www.npmjs.com/) - Comes with Node.js.
+- PostgreSQL (Optional if using the provided remote database).
+
+## Installation
+
+1.Clone the repository to your local machine:
+
+```sh
+git clone https://github.com/manukj/zk_memory_oragan
+cd zk_memory_oragan
+```
+
+2. Run the Server
+a) Configure the Database
+Inside the node-app folder, create a .env file (if it does not exist) and add the following PostgreSQL connection URL:
+```sh
+cd node-app
+DATABASE_URL=postgresql://neondb_owner:npg_VbUzL7ST6uqQ@ep-holy-bush-a2cx0q50-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require
+```
+
+b) Start the Server by running docker ( make sure u run docker in root )
+```
+cd ..
+docker-compose up --build
+```
+
+3. Run the Client
+Open another terminal window and start the client application:
+
+```sh
+npm run start
+Now, the application should be running successfully. 🚀
+```
 
 ## Conclusion
 The **ZK-Decentralized Memory Organ** is a highly **secure, scalable, and privacy-preserving** decentralized storage solution. By combining **ZK-SNARK authentication, IPFS, OrbitDB, PostgreSQL caching, and Nginx load balancing**, it ensures optimal **performance, security, and fault tolerance**.
